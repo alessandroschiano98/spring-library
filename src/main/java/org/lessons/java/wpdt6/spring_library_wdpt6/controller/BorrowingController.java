@@ -33,13 +33,13 @@ public class BorrowingController {
     @PostMapping
     public String store( @Valid @ModelAttribute("borrowing") Borrowing borrowingForm, BindingResult bindingResult, Model model){
 
-        // se ci sono errori
+        // ! se ci sono errori
         if (bindingResult.hasErrors()){
             model.addAttribute("borrowing", borrowingForm);
             return "borrowings/create";
         }
 
-        // * se non ci sono errori allora creo il prestito
+        // ! se non ci sono errori allora creo il prestito
         borrowingRepository.save(borrowingForm);
 
         return "redirect:/books";

@@ -23,7 +23,7 @@ public class Borrowing {
     @PastOrPresent( message = "You cannot borrow a book in the future")
     private LocalDate borrowingDate;
 
-    // * se e' null allora ancora non e' stato ritornato
+    // ! se e' null allora ancora non e' stato ritornato
     @PastOrPresent(message = "You cannot return a book in the future")
     private LocalDate returnDate;
 

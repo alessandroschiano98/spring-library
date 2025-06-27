@@ -11,37 +11,20 @@
     <main class="container">
         <section class="title row">
             <div class="col-12">
-                <h1 class="text-center">
-                    Single book
+                <h1 class="text-center fw-bold mb-3">
+                    Books Management System
                 </h1>
             </div>
         </section>
 
-        <section class="book row justify-content-center mb-5" th:object="${book}">
-            <article class="col-6 card">
-                <img th:src="*{imageUrl}" class="card-img-top w-25" alt="...">
-                <div class="card-body">
-                    <h1 class="card-title">
-                        [[*{title}]] by [[*{author}]]
-                    </h1>
-                    <h2 class="card-subtitle">
-                        ISBN: [[*{isbn}]]
-                    </h2>
-                </div>
-                <div class="card-footer">
-                    <p>
-                        Published by [[*{publisher}]] on [[*{publicationDate}]], [[*{numberOfCopies}]] times.
-                    </p>
-                </div>
-            </article>
-        </section>
-
-        <section class="borrowings row justify-content-center">
-            <div class="col-6 ">
-            <table class="table table-hover " th:if="${book.borrowings.size() > 0}">
+    
+                <section class="borrowings row">
+            <table class="col-12 table table-hover" th:if="${borrowings.size() > 0}">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Book id</th>
+                        <th scope="col">Book title</th>
                         <th scope="col">Borrowing Date</th>
                         <th scope="col">Return Date</th>
                         <th scope="col">Note</th>
@@ -49,8 +32,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="borrowing : ${book.borrowings}" th:object="${borrowing}">
+                    <tr th:each="borrowing : ${borrowings}" th:object="${borrowing}">
                         <td>[[*{id}]]</td>
+                        <td>[[*{book.id}]]</td>
+                        <td>[[*{book.title}]]</td>
                         <td>[[*{borrowingDate}]]</td>
                         <td>[[*{returnDate}]]</td>
                         <td>[[*{notes}]]</td>
@@ -70,13 +55,13 @@
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletion of borrowing of the book with title <strong>"[[${book.title}]]"</strong> borrowed on the <strong>[[*{borrowingDate}]]</strong></h1>
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletion of borrowing of the book with title <strong>"[[${borrowing.book.title}]]"</strong> borrowed on the <strong>[[*{borrowingDate}]]</strong></h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <p>
-                                                Are you sure that you want to delete the book with title <strong>"[[${book.title}]]"</strong> borrowed on the <strong>[[*{borrowingDate}]]</strong> and id: [[*{id}]]?
+                                                Are you sure that you want to delete the book with title <strong>"[[${borrowing.book.title}]]"</strong> borrowed on the <strong>[[*{borrowingDate}]]</strong> and id: [[*{id}]]?
                                             </p>
                                         </div>
                                         <div class="modal-footer">
@@ -95,13 +80,13 @@
                     </tr>
                 </tbody>
             </table>
-            </div>
 
-            <h2 class="text-center text-primary" th:unless="${book.borrowings.size() > 0}">
-                This book has never been borrowed
+            <h2 class="text-center text-primary" th:unless="${borrowings.size() > 0}">
+                There are no borrowings to be seen
             </h2>
         </section>
     </main>
+
 
 
     <th:block th:replace="~{fragments/footer :: scripts}">
