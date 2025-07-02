@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<head th:replace="~{fragments/head :: head('Books')}" />
+<head th:replace="~{fragments/head :: head('Categories')}" />
 
 <body>
     <header>
@@ -12,35 +12,39 @@
         <section class="title row">
             <div class="col-12">
                 <h1 class="text-center fw-bold mb-3">
-                    Books Management System
+                    Categories
                 </h1>
             </div>
         </section>
 
-    
-                <section class="borrowings row">
-            <table class="col-12 table table-hover" th:if="${borrowings.size() > 0}">
+        <section class="search-bar row justify-content-center mb-3">
+            <div class="col-12 d-flex justify-content-between">
+                <div class="creation-button">
+                    <a th:href="@{/categories/create}" class="btn btn-primary">Create a new category</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories">
+            <table class="table table-hover" th:if="${categories.size() > 0}">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Book id</th>
-                        <th scope="col">Book title</th>
-                        <th scope="col">Borrowing Date</th>
-                        <th scope="col">Return Date</th>
-                        <th scope="col">Note</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col"># books</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="borrowing : ${borrowings}" th:object="${borrowing}">
+                    <tr th:each="category : ${categories}" th:object="${category}">
                         <td>[[*{id}]]</td>
-                        <td>[[*{book.id}]]</td>
-                        <td>[[*{book.title}]]</td>
-                        <td>[[*{borrowingDate}]]</td>
-                        <td>[[*{returnDate}]]</td>
-                        <td>[[*{notes}]]</td>
+                        <td>[[*{name}]]</td>
+                        <td>[[*{description}]]</td>
+                        <td>[[*{books.size()}]]</td>
                         <td>
-                            <a th:href="@{|/borrowings/*{id}/edit|}" class="btn btn-success btn-sm">Edit</a>
+                            <a th:href="@{|/categories/*{id}|}" class="btn btn-primary btn-sm">Show</a>
+                            <a th:href="@{|/categories/*{id}/edit|}" class="btn btn-success btn-sm">Edit</a>
 
                              <!-- * Il BOTTONE che triggera la modale -->
                             <button type="button" class="d-inline btn btn-warning btn-sm" data-bs-toggle="modal"
@@ -55,19 +59,19 @@
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletion of borrowing of the book with title <strong>"[[${borrowing.book.title}]]"</strong> borrowed on the <strong>[[*{borrowingDate}]]</strong></h1>
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletion of <strong>"[[*{name}]]"</strong></h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <p>
-                                                Are you sure that you want to delete the book with title <strong>"[[${borrowing.book.title}]]"</strong> borrowed on the <strong>[[*{borrowingDate}]]</strong> and id: [[*{id}]]?
+                                                Are you sure that you want to delete the book with title <strong>"[[*{name}]]"</strong>, with id: [[*{id}]]
                                             </p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Close</button>
-                                            <form th:action="@{|/borrowings/delete/*{id}|}" method="post" class="d-inline">
+                                            <form th:action="@{|/categories/delete/*{id}|}" method="post" class="d-inline">
                                                 <button type="submit" class="btn btn-danger btn">Delete</button>
                                             </form> 
                                         </div>
@@ -81,8 +85,8 @@
                 </tbody>
             </table>
 
-            <h2 class="text-center text-primary" th:unless="${borrowings.size() > 0}">
-                There are no borrowings to be seen
+            <h2 class="text-center text-primary" th:unless="${categories.size() > 0}">
+                There are no categories available at this moment
             </h2>
         </section>
     </main>

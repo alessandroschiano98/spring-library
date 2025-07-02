@@ -8,6 +8,7 @@ import org.lessons.java.wpdt6.spring_library_wdpt6.model.Book;
 import org.lessons.java.wpdt6.spring_library_wdpt6.model.Borrowing;
 import org.lessons.java.wpdt6.spring_library_wdpt6.repository.BookRepository;
 import org.lessons.java.wpdt6.spring_library_wdpt6.repository.BorrowingRepository;
+import org.lessons.java.wpdt6.spring_library_wdpt6.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -34,13 +35,16 @@ public class BookController {
     @Autowired // * forziamo la dipendency injection
     private BorrowingRepository borrowingRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @GetMapping
     public String index(Model model, @RequestParam( name = "keyword", required = false) String keyword){
 
-        // ! Se qualcuno ha cercato, allora cerchiamo
+        // & Se qualcuno ha cercato, allora cerchiamo
         List<Book> books;
         if ( keyword != null && !keyword.isEmpty()){
-            // ! implementiamo la ricerca
+            // % implementiamo la ricerca
             books = bookRepository.findByTitleContainingIgnoreCase(keyword);
         } else {
             books = bookRepository.findAll();
@@ -49,7 +53,7 @@ public class BookController {
         return "books/index";
     }
 
-    @GetMapping("/{id}") // ! app.com/books/2
+    @GetMapping("/{id}") // $ app.com/books/2
     public String show( @PathVariable("id") Integer id, Model model){
         model.addAttribute("book", bookRepository.findById(id).get());
         return "books/show";
@@ -58,6 +62,7 @@ public class BookController {
     @GetMapping("/create") // ! ...com/books/create
     public String create(Model model){
         model.addAttribute("book", new Book());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "books/create";
     }
 
@@ -66,10 +71,11 @@ public class BookController {
 
         //  ! Validazione dei dati
         if (bindingResult.hasErrors()){
+            model.addAttribute("categories", categoryRepository.findAll());
             return "/books/create";
         }
 
-        // ! Salva il libro nel DB
+        // Salva il libro nel DB
         bookRepository.save(formBook);
 
         return "redirect:/books";
@@ -78,6 +84,8 @@ public class BookController {
     @GetMapping("/edit/{id}") // ! ...com/books/edit/11
     public String edit(@PathVariable("id") Integer id, Model model){
         model.addAttribute("book", bookRepository.findById(id).get());
+        model.addAttribute("categories", categoryRepository.findAll());
+
         return "books/edit";
     }
 
@@ -86,10 +94,11 @@ public class BookController {
 
         //  ! Validazione dei dati
         if (bindingResult.hasErrors()){
+            model.addAttribute("categories", categoryRepository.findAll());
             return "/books/edit";
         }
 
-        // ! Salva il libro nel DB
+        // Salva il libro nel DB
         bookRepository.save(formBook);
 
         return "redirect:/books";
@@ -100,11 +109,14 @@ public class BookController {
 
         Book bookToDelete = bookRepository.findById(id).get();
 
+        // ! Per ogni prestito in cui ho prestato questo libro che sto per cancellare
+        // * rimuovi ogni traccia di tale prestito
         for (Borrowing borrowing : bookToDelete.getBorrowings()) {
             borrowingRepository.delete(borrowing);
         }
-
-        // ! cancella la risorsa dal DB
+        
+        // ! e solo in seguito cancellalo
+        // * cancella la risorsa dal DB
         bookRepository.delete(bookToDelete);
 
 

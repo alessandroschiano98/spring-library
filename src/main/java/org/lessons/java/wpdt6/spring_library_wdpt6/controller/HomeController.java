@@ -12,5 +12,4 @@ public class HomeController {
     public String homepage(){
         return "pages/home";
     }
-    
 }
