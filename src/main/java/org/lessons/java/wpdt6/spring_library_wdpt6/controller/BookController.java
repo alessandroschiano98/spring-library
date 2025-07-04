@@ -41,10 +41,10 @@ public class BookController {
     @GetMapping
     public String index(Model model, @RequestParam( name = "keyword", required = false) String keyword){
 
-        // & Se qualcuno ha cercato, allora cerchiamo
+        // ! Se qualcuno ha cercato, allora cerchiamo
         List<Book> books;
         if ( keyword != null && !keyword.isEmpty()){
-            // % implementiamo la ricerca
+            // ! implementiamo la ricerca
             books = bookRepository.findByTitleContainingIgnoreCase(keyword);
         } else {
             books = bookRepository.findAll();
@@ -75,7 +75,7 @@ public class BookController {
             return "/books/create";
         }
 
-        // Salva il libro nel DB
+        //! Salva il libro nel DB
         bookRepository.save(formBook);
 
         return "redirect:/books";
@@ -98,7 +98,7 @@ public class BookController {
             return "/books/edit";
         }
 
-        // Salva il libro nel DB
+        // ! Salva il libro nel DB
         bookRepository.save(formBook);
 
         return "redirect:/books";
