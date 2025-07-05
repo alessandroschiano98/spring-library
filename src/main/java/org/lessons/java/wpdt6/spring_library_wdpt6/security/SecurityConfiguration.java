@@ -38,14 +38,14 @@ public class SecurityConfiguration {
 
     @Bean
     DatabaseUserDetailsService userDetailsService() {
-        return new DatabaseUserDetailsService(); // strumento per andare a cercare l'utente by username
+        return new DatabaseUserDetailsService(); // ! strumento per andare a cercare l'utente by username
     }
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder(); // in base a quello che mettiamo nel db prima
-                                                                           // della password stabilisci quale sia la
-                                                                           // funzione di hashing che userai
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder(); // ! in base a quello che mettiamo nel db prima
+                                                                           // ! della password stabilisci quale sia la
+                                                                           // ! funzione di hashing che userai
     }
 
 }
