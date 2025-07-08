@@ -5,7 +5,7 @@
 
 <body>
     <header>
-        <nav th:replace="~{fragments/navbar :: navbar('Spring Library WDPT6')}" />
+        <nav th:replace="~{fragments/navbar :: navbar('Spring Library')}" />
     </header>
 
     <main class="container">
@@ -57,13 +57,6 @@
                             th:field="${book.categories}" 
                             th:value="${category.id}">
                         <label for="author" class="form-check-label">[[${category.name}]]</label>
-                        <!-- <input id="author" type="text" class="form-control mb-3" th:field="*{author}" th:errorClass="is-invalid"  required > -->
-                        
-                        <!-- <div th:if="${#fields.hasErrors('author')}" class="invalid-feedback" >
-                            <ul>
-                                <li th:each="err : ${#fields.errors('author')}" th:text="${err}"></li>
-                            </ul>
-                        </div> -->
                     </div>
 
 
